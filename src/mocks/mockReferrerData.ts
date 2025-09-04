@@ -1,0 +1,67 @@
+import type { Referrer } from '@/schemas/referrer.schemas'
+
+// Mock referrer data for local development and testing
+export const mockReferrers: Array<Referrer> = [
+  {
+    id: 1,
+    name: 'Nguyễn Văn Đức',
+    referralCode: 'DL001',
+    email: 'duc.nguyen@gmail.com',
+    phone: '0901234567',
+    status: 'ACTIVE',
+    createdAt: new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString(),
+    updatedAt: new Date().toISOString(),
+    totalBookings: 15,
+    totalRevenue: 45000000,
+  },
+  {
+    id: 2,
+    name: 'Trần Thị Mai Anh',
+    referralCode: 'DL002',
+    email: 'maianh.tran@gmail.com',
+    phone: '0902345678',
+    status: 'ACTIVE',
+    createdAt: new Date(Date.now() - 45 * 24 * 3600 * 1000).toISOString(),
+    updatedAt: new Date().toISOString(),
+    totalBookings: 8,
+    totalRevenue: 24000000,
+  },
+  {
+    id: 3,
+    name: 'Lê Minh Tuấn',
+    referralCode: 'DL003',
+    email: 'minhtuan.le@gmail.com',
+    phone: '0903456789',
+    status: 'ACTIVE',
+    createdAt: new Date(Date.now() - 15 * 24 * 3600 * 1000).toISOString(),
+    updatedAt: new Date().toISOString(),
+    totalBookings: 3,
+    totalRevenue: 9000000,
+  },
+  {
+    id: 4,
+    name: 'Phạm Thị Thanh Hoa',
+    referralCode: 'DL004',
+    email: 'thanhhoa.pham@gmail.com',
+    phone: '0904567890',
+    status: 'INACTIVE',
+    createdAt: new Date(Date.now() - 60 * 24 * 3600 * 1000).toISOString(),
+    updatedAt: new Date().toISOString(),
+    totalBookings: 1,
+    totalRevenue: 3000000,
+  },
+  {
+    id: 5,
+    name: 'Võ Minh Khoa',
+    referralCode: 'DL005',
+    email: 'minhkhoa.vo@gmail.com',
+    phone: '0905678901',
+    status: 'ACTIVE',
+    createdAt: new Date(Date.now() - 7 * 24 * 3600 * 1000).toISOString(),
+    updatedAt: new Date().toISOString(),
+    totalBookings: 12,
+    totalRevenue: 36000000,
+  },
+]
+
+export default mockReferrers

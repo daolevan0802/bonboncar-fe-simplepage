@@ -1,0 +1,83 @@
+steps:
+  # Step 1: Fetch secrets and create .env file
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: 'Fetch Secrets'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "VITE_BOOKING_API=${_VITE_BOOKING_API}" > .env
+        echo "VITE_BOOKING_API_KEY=${_VITE_BOOKING_API_KEY}" >> .env
+        echo "VITE_CRONJOB_API_URL=${_VITE_CRONJOB_API_URL}" >> .env
+        echo "VITE_CRONJOB_API_KEY=${_VITE_CRONJOB_API_KEY}" >> .env
+  # Step 2: Build Docker image with environment variables
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - '--no-cache'
+      - '-t'
+      - >-
+        $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+      - .
+      - '-f'
+      - Dockerfile
+      - '--build-arg'
+      - VITE_BOOKING_API=$_VITE_BOOKING_API
+      - '--build-arg'
+      - VITE_BOOKING_API_KEY=$_VITE_BOOKING_API_KEY
+      - '--build-arg'
+      - VITE_CRONJOB_API_URL=$_VITE_CRONJOB_API_URL
+      - '--build-arg'
+      - VITE_CRONJOB_API_KEY=$_VITE_CRONJOB_API_KEY
+    id: Build
+
+  # Step 3: Push Docker image to Google Artifact Registry
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - >-
+        $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+    id: Push
+
+  # Step 4: Deploy to Cloud Run with environment variables
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
+    args:
+      - run
+      - services
+      - update
+      - $_SERVICE_NAME
+      - '--platform=managed'
+      - >-
+        --image=$_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+      - >-
+        --labels=managed-by=gcp-cloud-build-deploy-cloud-run,commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,gcb-trigger-id=$_TRIGGER_ID
+      - '--region=$_DEPLOY_REGION'
+      - '--quiet'
+      - '--set-env-vars=VITE_BOOKING_API=${_VITE_BOOKING_API}'
+      - '--set-env-vars=VITE_BOOKING_API_KEY=${_VITE_BOOKING_API_KEY}'
+      - '--set-env-vars=VITE_CRONJOB_API_URL=${_VITE_CRONJOB_API_URL}'
+      - '--set-env-vars=VITE_CRONJOB_API_KEY=${_VITE_CRONJOB_API_KEY}'
+    id: Deploy
+    entrypoint: gcloud
+
+images:
+  - >-
+    $_AR_HOSTNAME/$_AR_PROJECT_ID/$_AR_REPOSITORY/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA
+
+options:
+  substitutionOption: ALLOW_LOOSE
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _AR_PROJECT_ID: bonboncar
+  _TRIGGER_ID: a9f61074-64fd-4cc2-9b93-4a22a203ec82
+  _PLATFORM: managed
+  _SERVICE_NAME: bonboncar-cms-v2
+  _DEPLOY_REGION: asia-southeast1
+  _AR_HOSTNAME: asia-southeast1-docker.pkg.dev
+  _AR_REPOSITORY: cloud-run-source-deploy
+
+tags:
+  - gcp-cloud-build-deploy-cloud-run
+  - gcp-cloud-build-deploy-cloud-run-managed
+  - bonboncar-cms-v2
