@@ -84,14 +84,28 @@ export function AffiliateList({
       {
         accessorKey: 'affiliate_phone',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Số điện thoại" />,
-        cell: ({ row }) => <div className="text-sm">{getSafeValue(row.getValue('affiliate_phone'))}</div>,
+        cell: ({ row }) => {
+          const phone = getSafeValue(row.getValue('affiliate_phone'))
+          return phone ? (
+            <Copy value={phone} className="text-sm text-blue-600" />
+          ) : (
+            <div className="text-sm text-muted-foreground">-</div>
+          )
+        },
         size: 150,
         meta: { label: 'Số điện thoại' },
       },
       {
         accessorKey: 'affiliate_email',
         header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
-        cell: ({ row }) => <div className="text-sm">{getSafeValue(row.getValue('affiliate_email'))}</div>,
+        cell: ({ row }) => {
+          const email = getSafeValue(row.getValue('affiliate_email'))
+          return email ? (
+            <Copy value={email} className="text-sm text-blue-600" />
+          ) : (
+            <div className="text-sm text-muted-foreground">-</div>
+          )
+        },
         size: 200,
         meta: { label: 'Email' },
       },

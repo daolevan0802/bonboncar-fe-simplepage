@@ -21,5 +21,5 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     </ThemeProvider>
   ),
 
-  notFoundComponent: () => <Navigate to="/dashboard/bookings" />,
+  notFoundComponent: () => <Navigate to="/not-found" />,
 })

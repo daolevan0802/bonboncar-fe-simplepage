@@ -1,4 +1,4 @@
-import { Calendar, DollarSign, TrendingUp, Users } from 'lucide-react'
+import { Calendar, DollarSign, Users } from 'lucide-react'
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { formatCurrency } from '@/lib/formatters'
@@ -34,18 +34,10 @@ export function StatsOverviewCards({ stats }: StatsOverviewCardsProps) {
       color: 'text-purple-600',
       bgColor: 'bg-purple-50',
     },
-    {
-      title: 'Tổng hoa hồng',
-      value: formatCurrency(stats.totalCommission),
-      description: 'Đã trả cho đại lý',
-      icon: TrendingUp,
-      color: 'text-orange-600',
-      bgColor: 'bg-orange-50',
-    },
   ]
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {cards.map((card, index) => {
         const Icon = card.icon
         return (

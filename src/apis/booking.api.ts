@@ -125,9 +125,6 @@ export const bookingAPI = {
         cancel_fee_percentage: data.cancel_fee_percentage,
         is_no_deposit: data.is_no_deposit,
       }
-      if (data.host_commission !== '' && data.host_commission != null) {
-        filteredData.host_commission = data.host_commission
-      }
       if (data.reason_of_cancel !== '' && data.reason_of_cancel != null) {
         filteredData.reason_of_cancel = data.reason_of_cancel
       }

@@ -1,5 +1,13 @@
-import type { GetAffiliateBookingsResponse, GetAffiliateResponse } from '@/schemas/affiliate.schemas'
-import { GetAffiliateBookingsResponseSchema, GetAffiliateResponseSchema } from '@/schemas/affiliate.schemas'
+import type {
+  AffiliateDashboardResponse,
+  GetAffiliateBookingsResponse,
+  GetAffiliateResponse,
+} from '@/schemas/affiliate.schemas'
+import {
+  AffiliateDashboardResponseSchema,
+  GetAffiliateBookingsResponseSchema,
+  GetAffiliateResponseSchema,
+} from '@/schemas/affiliate.schemas'
 import { parseAndLog } from '@/schemas/log'
 import http from '@/utils/http'
 
@@ -20,5 +28,9 @@ export const affiliateAPI = {
       `/affiliates/bookings?page=${page}&pageSize=${pageSize}&keyword=${keyword}&isAffiliate=${isAffiliate}`,
     )
     return parseAndLog(GetAffiliateBookingsResponseSchema, response.data, 'get affiliate bookings')
+  },
+  getAffiliateDashboardStats: async (year: number): Promise<AffiliateDashboardResponse> => {
+    const response = await http.booking_http.get<AffiliateDashboardResponse>(`/affiliates/statistic?year=${year}  `)
+    return parseAndLog(AffiliateDashboardResponseSchema, response.data, 'get affiliate dashboard stats')
   },
 }

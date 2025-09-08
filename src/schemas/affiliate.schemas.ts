@@ -177,3 +177,67 @@ export const AffiliateDashboardStatsSchema = z.object({
 
 export type AffiliateStats = z.infer<typeof AffiliateStatsSchema>
 export type AffiliateDashboardStats = z.infer<typeof AffiliateDashboardStatsSchema>
+
+// DTOs for Affiliate Dashboard Stats
+export const TopAffiliateDtoSchema = z.object({
+  id: z.number(),
+  affiliate_code: z.string(),
+  affiliate_name: z.string(),
+  totalBookings: z.number(),
+  totalRevenue: z.number(),
+  commission: z.number(),
+})
+
+export const MonthlyStatsDtoSchema = z.object({
+  month: z.string(), // Hoặc z.string().regex(/^\d{4}-\d{2}$/) nếu bạn muốn định dạng YYYY-MM
+  totalBookings: z.number(),
+  totalRevenue: z.number(),
+  newAffiliates: z.number(),
+})
+
+export const BookingStatusStatsDtoSchema = z.object({
+  status: z.string(),
+  count: z.number(),
+  percentage: z.number(),
+})
+
+export const CityStatsDtoSchema = z.object({
+  city: z.string(),
+  affiliateCount: z.number(),
+  bookingCount: z.number(),
+  revenue: z.number(),
+})
+
+export const OverviewStatsDtoSchema = z.object({
+  totalAffiliates: z.number(),
+  totalBookings: z.number(),
+  totalRevenue: z.number(),
+  totalCommission: z.number(),
+  activeAffiliates: z.number(),
+  topAffiliates: z.array(TopAffiliateDtoSchema),
+  monthlyStats: z.array(MonthlyStatsDtoSchema),
+  bookingStatusStats: z.array(BookingStatusStatsDtoSchema),
+  cityStats: z.array(CityStatsDtoSchema),
+})
+
+export const PeriodDtoSchema = z.object({
+  startDate: z.string().datetime(), // Giả định là định dạng ISO 8601
+  endDate: z.string().datetime(), // Giả định là định dạng ISO 8601
+})
+
+export const AffiliateDashboardResponseSchema = z.object({
+  success: z.boolean(),
+  data: z.object({
+    overview: OverviewStatsDtoSchema,
+    period: PeriodDtoSchema,
+  }),
+})
+
+// Types inference
+export type TopAffiliateDto = z.infer<typeof TopAffiliateDtoSchema>
+export type MonthlyStatsDto = z.infer<typeof MonthlyStatsDtoSchema>
+export type BookingStatusStatsDto = z.infer<typeof BookingStatusStatsDtoSchema>
+export type CityStatsDto = z.infer<typeof CityStatsDtoSchema>
+export type OverviewStatsDto = z.infer<typeof OverviewStatsDtoSchema>
+export type PeriodDto = z.infer<typeof PeriodDtoSchema>
+export type AffiliateDashboardResponse = z.infer<typeof AffiliateDashboardResponseSchema>

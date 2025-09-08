@@ -8,7 +8,7 @@ import { createFileRoute, Navigate, Outlet } from '@tanstack/react-router'
 export const Route = createFileRoute('/dashboard')({
   beforeLoad: authGuard,
   component: RouteComponent,
-  notFoundComponent: () => <Navigate to="/dashboard/bookings" />,
+  notFoundComponent: () => <Navigate to="/not-found" />,
 })
 
 function RouteComponent() {

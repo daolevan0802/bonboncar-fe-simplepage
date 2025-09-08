@@ -1,6 +1,7 @@
 import { affiliateAPI } from '@/apis/affiliate.api'
 import type {
   AffiliateBookingsFilter,
+  AffiliateDashboardResponse,
   AffiliateFilter,
   GetAffiliateBookingsResponse,
   GetAffiliateResponse,
@@ -15,6 +16,7 @@ export const affiliateQueryKeys = {
   list: (filter: AffiliateFilter) => [...affiliateQueryKeys.lists(), filter] as const,
   details: () => [...affiliateQueryKeys.all, 'detail'] as const,
   detail: (id: number) => [...affiliateQueryKeys.details(), id] as const,
+  dashboardStats: (year: number) => [...affiliateQueryKeys.all, 'dashboardStats', year] as const,
 }
 
 // Query Keys
@@ -49,6 +51,20 @@ export function useAffiliateBookingsQueries(
     queryKey: affiliateBookingsQueryKeys.list(filter),
     queryFn: () =>
       affiliateAPI.getAffiliateBookings(filter.page, filter.pageSize, filter.keyword || '', filter.isAffiliate ?? true),
+    retry: 3,
+    retryDelay: 1000,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    ...options,
+  })
+}
+
+export function useAffiliateDashboardStatsQueries(
+  year: number,
+  options?: Omit<UseQueryOptions<AffiliateDashboardResponse, unknown>, 'queryKey' | 'queryFn'>,
+) {
+  return useQuery({
+    queryKey: affiliateQueryKeys.dashboardStats(year),
+    queryFn: () => affiliateAPI.getAffiliateDashboardStats(year),
     retry: 3,
     retryDelay: 1000,
     staleTime: 5 * 60 * 1000, // 5 minutes

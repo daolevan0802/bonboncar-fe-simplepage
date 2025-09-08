@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as NotFoundIndexRouteImport } from './routes/not-found/index'
 import { Route as DashboardStatisticsIndexRouteImport } from './routes/dashboard/statistics/index'
 import { Route as DashboardBookingsIndexRouteImport } from './routes/dashboard/bookings/index'
 import { Route as DashboardBookingsAffiliateIndexRouteImport } from './routes/dashboard/bookings-affiliate/index'
@@ -24,6 +25,11 @@ const DashboardRouteRoute = DashboardRouteRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotFoundIndexRoute = NotFoundIndexRouteImport.update({
+  id: '/not-found/',
+  path: '/not-found/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DashboardStatisticsIndexRoute =
@@ -53,6 +59,7 @@ const DashboardAffiliatesIndexRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/not-found': typeof NotFoundIndexRoute
   '/dashboard/affiliates': typeof DashboardAffiliatesIndexRoute
   '/dashboard/bookings-affiliate': typeof DashboardBookingsAffiliateIndexRoute
   '/dashboard/bookings': typeof DashboardBookingsIndexRoute
@@ -61,6 +68,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/not-found': typeof NotFoundIndexRoute
   '/dashboard/affiliates': typeof DashboardAffiliatesIndexRoute
   '/dashboard/bookings-affiliate': typeof DashboardBookingsAffiliateIndexRoute
   '/dashboard/bookings': typeof DashboardBookingsIndexRoute
@@ -70,6 +78,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/not-found/': typeof NotFoundIndexRoute
   '/dashboard/affiliates/': typeof DashboardAffiliatesIndexRoute
   '/dashboard/bookings-affiliate/': typeof DashboardBookingsAffiliateIndexRoute
   '/dashboard/bookings/': typeof DashboardBookingsIndexRoute
@@ -80,6 +89,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/not-found'
     | '/dashboard/affiliates'
     | '/dashboard/bookings-affiliate'
     | '/dashboard/bookings'
@@ -88,6 +98,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/not-found'
     | '/dashboard/affiliates'
     | '/dashboard/bookings-affiliate'
     | '/dashboard/bookings'
@@ -96,6 +107,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/not-found/'
     | '/dashboard/affiliates/'
     | '/dashboard/bookings-affiliate/'
     | '/dashboard/bookings/'
@@ -105,6 +117,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+  NotFoundIndexRoute: typeof NotFoundIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -121,6 +134,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/not-found/': {
+      id: '/not-found/'
+      path: '/not-found'
+      fullPath: '/not-found'
+      preLoaderRoute: typeof NotFoundIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dashboard/statistics/': {
@@ -175,6 +195,7 @@ const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DashboardRouteRoute: DashboardRouteRouteWithChildren,
+  NotFoundIndexRoute: NotFoundIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -11,12 +11,12 @@ export function BookingStatusChart({ bookingStatusStats }: BookingStatusChartPro
   const totalBookings = bookingStatusStats.reduce((sum, stat) => sum + stat.count, 0)
 
   return (
-    <Card>
+    <Card className="h-full flex flex-col">
       <CardHeader>
         <CardTitle>Thống kê trạng thái đơn đặt xe</CardTitle>
         <CardDescription>Tổng cộng {totalBookings.toLocaleString()} đơn đặt xe</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="flex-1 space-y-4">
         {bookingStatusStats.map((stat, index) => (
           <div key={index} className="space-y-2">
             <div className="flex items-center justify-between">

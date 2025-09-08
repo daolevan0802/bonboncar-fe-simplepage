@@ -2,7 +2,7 @@ import { authAPI } from '@/apis/auth.api'
 import routes from '@/configs/routes'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { setToken } from '@/utils/cookies'
-import { setUserEmail } from '@/utils/user'
+import { removeUserEmail, removeUserRole, setUserEmail, setUserRole } from '@/utils/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 
@@ -19,13 +19,25 @@ export const useLoginMutation = () => {
       // Update auth store
       setToken(response.token)
       setUserEmail(response.email)
+      setUserRole(response.role)
       setAuthenticated(true)
 
       // Clear any cached data
       queryClient.clear()
 
-      // Redirect to dashboard
-      navigate({ to: routes.dashboardBookings })
+      // Redirect based on role
+      if (response.role === 'affiliate') {
+        navigate({ to: routes.dashboardBookingsAffiliate })
+      } else if (
+        response.role === 'admin' ||
+        response.role === 'superadmin' ||
+        response.role === 'strapi-super-admin'
+      ) {
+        navigate({ to: routes.dashboardStatistics })
+      } else {
+        // Default fallback - redirect to not found for unknown roles
+        navigate({ to: routes.notFound })
+      }
     },
     onError: (error) => {
       console.error('Login failed:', error)
@@ -45,6 +57,10 @@ export const useLogoutMutation = () => {
     onSettled: () => {
       // Always clear auth state regardless of API success/failure
       clearAuth()
+
+      // Clear user data
+      removeUserEmail()
+      removeUserRole()
 
       // Clear all cached data
       queryClient.clear()

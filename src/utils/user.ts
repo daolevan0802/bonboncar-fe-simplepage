@@ -24,3 +24,16 @@ export const setUserEmail = (email: string) => {
 export const removeUserEmail = () => {
   removeUser(configs.user.email)
 }
+
+// Role
+export const getUserRole = () => {
+  return getUser(configs.user.role) as string
+}
+
+export const setUserRole = (role: string) => {
+  setUser(configs.user.role, role)
+}
+
+export const removeUserRole = () => {
+  removeUser(configs.user.role)
+}

@@ -1,6 +1,7 @@
 import routes from '@/configs/routes'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { getToken } from '@/utils/cookies'
+import { getUserRole } from '@/utils/user'
 import { redirect } from '@tanstack/react-router'
 
 // AuthGuard function to be used with TanStack Router's beforeLoad
@@ -22,11 +23,27 @@ export const guestGuard = () => {
   const { isAuthenticated } = useAuthStore.getState()
   const token = getToken()
 
-  // If user is already authenticated, redirect to dashboard
+  // If user is already authenticated, redirect based on role
   if (isAuthenticated && token) {
-    throw redirect({
-      to: routes.dashboardBookings,
-      replace: true,
-    })
+    const userRole = getUserRole()
+
+    // Redirect based on role
+    if (userRole === 'affiliate') {
+      throw redirect({
+        to: routes.dashboardBookingsAffiliate,
+        replace: true,
+      })
+    } else if (userRole === 'admin' || userRole === 'superadmin' || userRole === 'strapi-super-admin') {
+      throw redirect({
+        to: routes.dashboardStatistics,
+        replace: true,
+      })
+    } else {
+      // Default fallback
+      throw redirect({
+        to: routes.notFound,
+        replace: true,
+      })
+    }
   }
 }

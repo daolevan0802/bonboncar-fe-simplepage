@@ -4,7 +4,9 @@ const routes = {
   dashboard: '/dashboard',
   dashboardBookings: '/dashboard/bookings',
   dashboardAffiliates: '/dashboard/affiliates',
-  404: '/404',
+  dashboardBookingsAffiliate: '/dashboard/bookings-affiliate',
+  dashboardStatistics: '/dashboard/statistics',
+  notFound: '/not-found',
   error: '*',
 }
 
