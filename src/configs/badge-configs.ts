@@ -1,4 +1,5 @@
-import type { BookingStatus } from '@/schemas/enum.schemas'
+import type { BookingStatus, BookingType, DeliveryOption, Purpose } from '@/schemas/enum.schemas'
+import { BookingTypeDisplay, DeliveryOptionDisplay, PurposeDisplay } from '@/schemas/enum.schemas'
 import { statusColors, statusDisplay } from '@/types/display.type'
 
 // Status color mapping
@@ -75,12 +76,37 @@ export const getNoLicensePointDisplay = (isNoLicensePoint: boolean): string => {
   return 'Không'
 }
 
-// Booking type color mapping
-export const getBookingTypeColor = (): string => {
-  return 'bg-blue-100 text-blue-800 border-blue-200'
-}
-
 // Platform color mapping
 export const getPlatformColor = (): string => {
   return 'bg-purple-100 text-purple-800 border-purple-200'
+}
+
+// Delivery option display mapping
+export const getDeliveryOptionDisplay = (option: DeliveryOption): string => {
+  return DeliveryOptionDisplay[option] || option
+}
+
+// Delivery option color mapping
+export const getDeliveryOptionColor = (): string => {
+  return 'bg-blue-100 text-blue-800 border-blue-200'
+}
+
+// Booking type display mapping
+export const getBookingTypeDisplay = (type: BookingType): string => {
+  return BookingTypeDisplay[type] || type
+}
+
+// Booking type color mapping
+export const getBookingTypeColor = (): string => {
+  return 'bg-green-100 text-green-800 border-green-200'
+}
+
+// Purpose display mapping
+export const getPurposeDisplay = (purpose: Purpose): string => {
+  return PurposeDisplay[purpose] || purpose
+}
+
+// Purpose color mapping
+export const getPurposeColor = (): string => {
+  return 'bg-orange-100 text-orange-800 border-orange-200'
 }

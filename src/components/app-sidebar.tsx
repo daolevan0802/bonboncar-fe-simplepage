@@ -23,12 +23,20 @@ const data = {
       isActive: true,
       items: [
         {
+          title: 'Thống kê',
+          url: '/dashboard/statistics',
+        },
+        {
+          title: 'Quản lý đại lý',
+          url: '/dashboard/affiliates',
+        },
+        {
           title: 'Quản lý đặt đơn',
           url: '/dashboard/bookings',
         },
         {
-          title: 'Quản lý đại lý',
-          url: '/dashboard/referrers',
+          title: 'Quản lý đặt đơn của đại lý',
+          url: '/dashboard/bookings-affiliate',
         },
       ],
     },

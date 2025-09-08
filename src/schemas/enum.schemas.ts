@@ -75,6 +75,27 @@ export const BookingTypeEnum = z.enum(['SELF_DRIVE', 'WITH_DRIVER'])
 
 export const PurposeEnum = z.enum(['Business', 'Vacation', 'Hometown visit', 'Others', 'Khác', 'Công tác'])
 
+// Display mappings for Vietnamese
+export const DeliveryOptionDisplay = {
+  'Customer pick up': 'Khách tự lấy xe',
+  'Delivery to Customer': 'Giao xe đến khách',
+  'Two way delivery': 'Giao và nhận xe',
+} as const
+
+export const BookingTypeDisplay = {
+  SELF_DRIVE: 'Tự lái',
+  WITH_DRIVER: 'Có tài xế',
+} as const
+
+export const PurposeDisplay = {
+  Business: 'Công tác',
+  Vacation: 'Du lịch',
+  'Hometown visit': 'Về quê',
+  Others: 'Khác',
+  Khác: 'Khác',
+  'Công tác': 'Công tác',
+} as const
+
 export const BookingFileCategoryEnum = z.enum([
   'DRIVER_LICENSE',
   'FACE_VERIFICATION',

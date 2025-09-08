@@ -21,13 +21,18 @@ import { Input } from '@/components/ui/input'
 import { PaginationWithLinks } from '@/components/ui/pagination-with-links'
 import {
   getBookingTypeColor,
+  getBookingTypeDisplay,
   getClientBookingCountColor,
   getClientBookingCountDisplay,
   getClientVerificationColor,
   getClientVerificationDisplay,
+  getDeliveryOptionColor,
+  getDeliveryOptionDisplay,
   getNoLicensePointColor,
   getNoLicensePointDisplay,
   getPlatformColor,
+  getPurposeColor,
+  getPurposeDisplay,
   getStatusColor,
   getStatusDisplay,
   getVatExportColor,
@@ -247,10 +252,9 @@ export function BookingTable({
         header: ({ column }) => <DataTableColumnHeader column={column} title={COLUMN_LABELS.booking_type} />,
         cell: ({ row }) => {
           const type = getSafeValue(row.getValue('booking_type'))
-          const vietnameseType = type === 'STANDARD' ? 'Tiêu chuẩn' : type === 'PREMIUM' ? 'Cao cấp' : type
           return (
             <Badge variant="outline" className={getBookingTypeColor()}>
-              {vietnameseType}
+              {getBookingTypeDisplay(type as any)}
             </Badge>
           )
         },
@@ -261,9 +265,11 @@ export function BookingTable({
         header: ({ column }) => <DataTableColumnHeader column={column} title={COLUMN_LABELS.delivery_option} />,
         cell: ({ row }) => {
           const option = getSafeValue(row.getValue('delivery_option'))
-          const vietnameseOption =
-            option === 'SELF_PICKUP' ? 'Tự đến lấy' : option === 'DELIVERY' ? 'Giao hàng' : option
-          return <div className="text-sm">{vietnameseOption}</div>
+          return (
+            <Badge variant="outline" className={getDeliveryOptionColor()}>
+              {getDeliveryOptionDisplay(option as any)}
+            </Badge>
+          )
         },
       },
       // 13. Địa chỉ giao xe
@@ -365,7 +371,14 @@ export function BookingTable({
       {
         accessorKey: 'purpose',
         header: ({ column }) => <DataTableColumnHeader column={column} title={COLUMN_LABELS.purpose} />,
-        cell: ({ row }) => <div className="text-sm">{getSafeValue(row.getValue('purpose'))}</div>,
+        cell: ({ row }) => {
+          const purpose = getSafeValue(row.getValue('purpose'))
+          return (
+            <Badge variant="outline" className={getPurposeColor()}>
+              {getPurposeDisplay(purpose as any)}
+            </Badge>
+          )
+        },
       },
       // 26. Lộ trình
       {

@@ -7,9 +7,17 @@ import { flexRender } from '@tanstack/react-table'
 interface DataTableProps<TData> extends React.ComponentProps<'div'> {
   table: TanstackTable<TData>
   actionBar?: React.ReactNode
+  onRowClick?: (row: any) => void
 }
 
-export function DataTable<TData>({ table, actionBar, children, className, ...props }: DataTableProps<TData>) {
+export function DataTable<TData>({
+  table,
+  actionBar,
+  onRowClick,
+  children,
+  className,
+  ...props
+}: DataTableProps<TData>) {
   return (
     <div className={cn('flex w-full flex-col gap-2.5 overflow-auto', className)} {...props}>
       {children}
@@ -35,7 +43,12 @@ export function DataTable<TData>({ table, actionBar, children, className, ...pro
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && 'selected'}
+                  className={onRowClick ? 'cursor-pointer hover:bg-muted/50' : ''}
+                  onClick={() => onRowClick?.(row)}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell
                       key={cell.id}

@@ -52,7 +52,7 @@ const ROUTE_CONFIG = {
     title: 'Quản lý tài khoản đại lý',
     showInBreadcrumb: true,
   },
-  '/dashboard/referrers': {
+  '/dashboard/affiliates': {
     title: 'Quản lý đại lý',
     showInBreadcrumb: true,
   },

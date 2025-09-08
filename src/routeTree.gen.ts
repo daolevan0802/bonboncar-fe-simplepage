@@ -11,8 +11,10 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DashboardReferrersIndexRouteImport } from './routes/dashboard/referrers/index'
+import { Route as DashboardStatisticsIndexRouteImport } from './routes/dashboard/statistics/index'
 import { Route as DashboardBookingsIndexRouteImport } from './routes/dashboard/bookings/index'
+import { Route as DashboardBookingsAffiliateIndexRouteImport } from './routes/dashboard/bookings-affiliate/index'
+import { Route as DashboardAffiliatesIndexRouteImport } from './routes/dashboard/affiliates/index'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
@@ -24,47 +26,80 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardReferrersIndexRoute = DashboardReferrersIndexRouteImport.update({
-  id: '/referrers/',
-  path: '/referrers/',
-  getParentRoute: () => DashboardRouteRoute,
-} as any)
+const DashboardStatisticsIndexRoute =
+  DashboardStatisticsIndexRouteImport.update({
+    id: '/statistics/',
+    path: '/statistics/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardBookingsIndexRoute = DashboardBookingsIndexRouteImport.update({
   id: '/bookings/',
   path: '/bookings/',
   getParentRoute: () => DashboardRouteRoute,
 } as any)
+const DashboardBookingsAffiliateIndexRoute =
+  DashboardBookingsAffiliateIndexRouteImport.update({
+    id: '/bookings-affiliate/',
+    path: '/bookings-affiliate/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardAffiliatesIndexRoute =
+  DashboardAffiliatesIndexRouteImport.update({
+    id: '/affiliates/',
+    path: '/affiliates/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard/affiliates': typeof DashboardAffiliatesIndexRoute
+  '/dashboard/bookings-affiliate': typeof DashboardBookingsAffiliateIndexRoute
   '/dashboard/bookings': typeof DashboardBookingsIndexRoute
-  '/dashboard/referrers': typeof DashboardReferrersIndexRoute
+  '/dashboard/statistics': typeof DashboardStatisticsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard/affiliates': typeof DashboardAffiliatesIndexRoute
+  '/dashboard/bookings-affiliate': typeof DashboardBookingsAffiliateIndexRoute
   '/dashboard/bookings': typeof DashboardBookingsIndexRoute
-  '/dashboard/referrers': typeof DashboardReferrersIndexRoute
+  '/dashboard/statistics': typeof DashboardStatisticsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/dashboard': typeof DashboardRouteRouteWithChildren
+  '/dashboard/affiliates/': typeof DashboardAffiliatesIndexRoute
+  '/dashboard/bookings-affiliate/': typeof DashboardBookingsAffiliateIndexRoute
   '/dashboard/bookings/': typeof DashboardBookingsIndexRoute
-  '/dashboard/referrers/': typeof DashboardReferrersIndexRoute
+  '/dashboard/statistics/': typeof DashboardStatisticsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/dashboard/bookings' | '/dashboard/referrers'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/dashboard/affiliates'
+    | '/dashboard/bookings-affiliate'
+    | '/dashboard/bookings'
+    | '/dashboard/statistics'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/dashboard/bookings' | '/dashboard/referrers'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/dashboard/affiliates'
+    | '/dashboard/bookings-affiliate'
+    | '/dashboard/bookings'
+    | '/dashboard/statistics'
   id:
     | '__root__'
     | '/'
     | '/dashboard'
+    | '/dashboard/affiliates/'
+    | '/dashboard/bookings-affiliate/'
     | '/dashboard/bookings/'
-    | '/dashboard/referrers/'
+    | '/dashboard/statistics/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -88,11 +123,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/dashboard/referrers/': {
-      id: '/dashboard/referrers/'
-      path: '/referrers'
-      fullPath: '/dashboard/referrers'
-      preLoaderRoute: typeof DashboardReferrersIndexRouteImport
+    '/dashboard/statistics/': {
+      id: '/dashboard/statistics/'
+      path: '/statistics'
+      fullPath: '/dashboard/statistics'
+      preLoaderRoute: typeof DashboardStatisticsIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
     '/dashboard/bookings/': {
@@ -102,17 +137,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardBookingsIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/bookings-affiliate/': {
+      id: '/dashboard/bookings-affiliate/'
+      path: '/bookings-affiliate'
+      fullPath: '/dashboard/bookings-affiliate'
+      preLoaderRoute: typeof DashboardBookingsAffiliateIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/affiliates/': {
+      id: '/dashboard/affiliates/'
+      path: '/affiliates'
+      fullPath: '/dashboard/affiliates'
+      preLoaderRoute: typeof DashboardAffiliatesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
   }
 }
 
 interface DashboardRouteRouteChildren {
+  DashboardAffiliatesIndexRoute: typeof DashboardAffiliatesIndexRoute
+  DashboardBookingsAffiliateIndexRoute: typeof DashboardBookingsAffiliateIndexRoute
   DashboardBookingsIndexRoute: typeof DashboardBookingsIndexRoute
-  DashboardReferrersIndexRoute: typeof DashboardReferrersIndexRoute
+  DashboardStatisticsIndexRoute: typeof DashboardStatisticsIndexRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
+  DashboardAffiliatesIndexRoute: DashboardAffiliatesIndexRoute,
+  DashboardBookingsAffiliateIndexRoute: DashboardBookingsAffiliateIndexRoute,
   DashboardBookingsIndexRoute: DashboardBookingsIndexRoute,
-  DashboardReferrersIndexRoute: DashboardReferrersIndexRoute,
+  DashboardStatisticsIndexRoute: DashboardStatisticsIndexRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(

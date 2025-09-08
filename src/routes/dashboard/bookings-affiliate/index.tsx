@@ -15,7 +15,7 @@ const bookingsSearchSchema = z.object({
   keyword: z.string().optional(),
 })
 
-export const Route = createFileRoute('/dashboard/bookings/')({
+export const Route = createFileRoute('/dashboard/bookings-affiliate/')({
   validateSearch: bookingsSearchSchema,
   component: RouteComponent,
 })
@@ -38,7 +38,7 @@ function RouteComponent() {
       page,
       pageSize,
       keyword: keyword || '',
-      isAffiliate: false,
+      isAffiliate: true,
     },
     {
       // Enable the query

@@ -30,7 +30,7 @@ import type { BookingStatus } from '@/schemas/enum.schemas'
 import type { ColumnDef, ColumnPinningState } from '@tanstack/react-table'
 import { getCoreRowModel, getFilteredRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 
-interface SimplifiedBookingTableProps {
+interface AffiliateBookingTableProps {
   data: Array<Booking>
   isLoading?: boolean
   onViewBooking?: (booking: Booking) => void
@@ -50,7 +50,7 @@ interface SimplifiedBookingTableProps {
   onBookingSelect?: (booking: Booking | null) => void
 }
 
-export function SimplifiedBookingTable({
+export function AffiliateBookingTable({
   data,
   isLoading = false,
   onViewBooking,
@@ -68,7 +68,7 @@ export function SimplifiedBookingTable({
   onBookingSelect,
   // show pagination by default
   showPagination = true,
-}: SimplifiedBookingTableProps) {
+}: AffiliateBookingTableProps) {
   const [inputValue, setInputValue] = useState(searchValue)
 
   useEffect(() => {

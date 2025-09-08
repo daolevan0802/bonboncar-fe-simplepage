@@ -23,8 +23,8 @@ class Http {
   constructor() {
     this.token = getToken()
     this.instance = axios.create({
-      baseURL: `${app_config.base_url}/api/v1`,
-      // baseURL: 'http://localhost:3000/api/v1/',
+      // baseURL: `${app_config.base_url}/api/v1`,
+      baseURL: 'http://localhost:3000/api/v1/',
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json',
@@ -79,8 +79,8 @@ class CronjobHttp {
   constructor() {
     this.token = getToken()
     this.instance = axios.create({
-      baseURL: `${app_config.cronjob_api_url}`,
-      // baseURL: 'http://localhost:3000',
+      // baseURL: `${app_config.cronjob_api_url}`,
+      baseURL: 'http://localhost:3000',
       timeout: 10000,
       headers: {
         'Content-Type': 'application/json',

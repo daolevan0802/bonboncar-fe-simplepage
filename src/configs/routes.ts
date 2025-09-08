@@ -3,7 +3,7 @@ const routes = {
   logout: '/logout',
   dashboard: '/dashboard',
   dashboardBookings: '/dashboard/bookings',
-  dashboardReferrers: '/dashboard/referrers',
+  dashboardAffiliates: '/dashboard/affiliates',
   404: '/404',
   error: '*',
 }
