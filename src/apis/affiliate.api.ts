@@ -12,9 +12,15 @@ import { parseAndLog } from '@/schemas/log'
 import http from '@/utils/http'
 
 export const affiliateAPI = {
-  getAffiliates: async (page: number, pageSize: number, keyword: string): Promise<GetAffiliateResponse> => {
+  getAffiliates: async (
+    page: number,
+    pageSize: number,
+    keyword: string,
+    sortBy?: string,
+    sortOrder?: 'ASC' | 'DESC',
+  ): Promise<GetAffiliateResponse> => {
     const response = await http.booking_http.get<GetAffiliateResponse>(
-      `/affiliates?page=${page}&pageSize=${pageSize}&keyword=${keyword}`,
+      `/affiliates?page=${page}&pageSize=${pageSize}&keyword=${keyword}${sortBy ? `&sortBy=${sortBy}` : ''}${sortOrder ? `&sortOrder=${sortOrder}` : ''}`,
     )
     return parseAndLog(GetAffiliateResponseSchema, response.data, 'get affiliates')
   },
@@ -22,10 +28,11 @@ export const affiliateAPI = {
     page: number,
     pageSize: number,
     keyword: string,
-    isAffiliate: boolean,
+    sortBy?: string,
+    sortOrder?: 'ASC' | 'DESC',
   ): Promise<GetAffiliateBookingsResponse> => {
     const response = await http.booking_http.get<GetAffiliateBookingsResponse>(
-      `/affiliates/bookings?page=${page}&pageSize=${pageSize}&keyword=${keyword}&isAffiliate=${isAffiliate}`,
+      `/affiliates/bookings?page=${page}&pageSize=${pageSize}&keyword=${keyword} ${sortBy ? `&sortBy=${sortBy}` : ''}${sortOrder ? `&sortOrder=${sortOrder}` : ''}`,
     )
     return parseAndLog(GetAffiliateBookingsResponseSchema, response.data, 'get affiliate bookings')
   },

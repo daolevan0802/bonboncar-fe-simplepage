@@ -7,12 +7,14 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { useAffiliateBookingsQueries } from '@/queries/affiliate.queries'
 import type { Booking } from '@/schemas/affiliate.schemas'
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 
 const bookingsSearchSchema = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10),
   keyword: z.string().optional(),
+  sortBy: z.string().optional(),
+  sortOrder: z.enum(['ASC', 'DESC']).optional(),
 })
 
 export const Route = createFileRoute('/dashboard/bookings/')({
@@ -23,9 +25,10 @@ export const Route = createFileRoute('/dashboard/bookings/')({
 function RouteComponent() {
   // State để quản lý booking được chọn
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null)
+  const navigate = useNavigate()
 
   // Get search params
-  const { page, pageSize, keyword } = Route.useSearch()
+  const { page, pageSize, keyword, sortBy, sortOrder } = Route.useSearch()
 
   // Use affiliate bookings query with isAdmin = true
   const {
@@ -38,7 +41,8 @@ function RouteComponent() {
       page,
       pageSize,
       keyword: keyword || '',
-      isAffiliate: false,
+      sortBy: sortBy || undefined,
+      sortOrder: sortOrder || undefined,
     },
     {
       // Enable the query
@@ -49,7 +53,32 @@ function RouteComponent() {
   const handleViewBooking = (_booking: any) => {}
   const handleEditBooking = (_booking: any) => {}
   const searchValue = keyword || ''
-  const handleSearch = (_v?: string) => {}
+
+  const handleSearch = (value?: string) => {
+    navigate({
+      to: '/dashboard/bookings',
+      search: {
+        page: 1, // Reset to first page when searching
+        pageSize,
+        keyword: value || undefined,
+        sortBy,
+        sortOrder,
+      },
+    })
+  }
+
+  const handleSort = (newSortBy?: string, newSortOrder?: 'ASC' | 'DESC') => {
+    navigate({
+      to: '/dashboard/bookings',
+      search: {
+        page: 1, // Reset to first page when sorting
+        pageSize,
+        keyword,
+        sortBy: newSortBy,
+        sortOrder: newSortOrder,
+      },
+    })
+  }
 
   // Handler để xử lý khi người dùng chọn booking
   const handleBookingSelect = (booking: any) => {
@@ -107,6 +136,9 @@ function RouteComponent() {
               onSearchChange={handleSearch}
               selectedBookingId={selectedBooking?.id || null}
               onBookingSelect={handleBookingSelect}
+              sortBy={sortBy}
+              sortOrder={sortOrder}
+              onSortChange={handleSort}
             />
           )}
         </CardContent>

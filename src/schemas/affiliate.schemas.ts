@@ -4,6 +4,8 @@ export const AffiliateFilterSchema = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10),
   keyword: z.string().optional(),
+  sortBy: z.string().optional(),
+  sortOrder: z.enum(['ASC', 'DESC']).optional(),
 })
 
 export const CarRentInfoSchema = z.object({
@@ -120,7 +122,8 @@ export const AffiliateBookingsFilterSchema = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10),
   keyword: z.string().optional(),
-  isAffiliate: z.boolean().optional(),
+  sortBy: z.string().optional(),
+  sortOrder: z.enum(['ASC', 'DESC']).optional(),
 })
 
 export type AffiliateBookingsFilter = z.infer<typeof AffiliateBookingsFilterSchema>

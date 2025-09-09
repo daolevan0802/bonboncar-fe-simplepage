@@ -1,13 +1,20 @@
 import { useMemo, useState } from 'react'
+import { ChevronDown, ChevronsUpDown, ChevronUp, X } from 'lucide-react'
 
 import { SimplifiedBookingTable } from '@/components/booking/simplified-booking-table'
 import { DataTableAdvancedToolbar } from '@/components/table/data-table-advanced-toolbar'
-import { DataTableColumnHeader } from '@/components/table/data-table-column-header'
 import { DataTableSkeleton } from '@/components/table/data-table-skeleton'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Copy } from '@/components/ui/copy'
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { PaginationWithLinks } from '@/components/ui/pagination-with-links'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -15,13 +22,7 @@ import { getCommonPinningStyles } from '@/lib/data-table'
 import { getSafeValue } from '@/lib/formatters'
 import type { AffiliateData } from '@/schemas/affiliate.schemas'
 import type { ColumnDef, ColumnPinningState } from '@tanstack/react-table'
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+import { flexRender, getCoreRowModel, getFilteredRowModel, useReactTable } from '@tanstack/react-table'
 
 interface AffiliateListProps {
   data: Array<AffiliateData>
@@ -34,6 +35,10 @@ interface AffiliateListProps {
   // Search props
   searchValue?: string
   onSearchChange?: (value: string) => void
+  // Sorting props
+  sortBy?: string
+  sortOrder?: 'ASC' | 'DESC'
+  onSortChange?: (sortBy?: string, sortOrder?: 'ASC' | 'DESC') => void
 }
 
 export function AffiliateList({
@@ -45,6 +50,9 @@ export function AffiliateList({
   totalCount = 0,
   searchValue = '',
   onSearchChange,
+  sortBy,
+  sortOrder,
+  onSortChange,
 }: AffiliateListProps) {
   const [inputValue, setInputValue] = useState(searchValue)
   const [selectedAffiliate, setSelectedAffiliate] = useState<AffiliateData | null>(null)
@@ -59,11 +67,67 @@ export function AffiliateList({
     return selectedAffiliate.bookings || []
   }, [selectedAffiliate])
 
+  // Custom column header component for server-side sorting with Vietnamese labels
+  const ServerSortableHeader = ({ title, accessorKey }: { title: string; accessorKey: string }) => {
+    const isSorted = sortBy === accessorKey
+    const isAsc = isSorted && sortOrder === 'ASC'
+    const isDesc = isSorted && sortOrder === 'DESC'
+
+    const handleSort = (direction: 'asc' | 'desc' | 'clear') => {
+      if (!onSortChange) return
+
+      if (direction === 'asc') {
+        onSortChange(accessorKey, 'ASC')
+      } else if (direction === 'desc') {
+        onSortChange(accessorKey, 'DESC')
+      } else {
+        onSortChange(undefined, undefined)
+      }
+    }
+
+    return (
+      <div className="flex items-center gap-1">
+        <span className="font-medium">{title}</span>
+        <DropdownMenu>
+          <DropdownMenuTrigger className="flex items-center gap-1 hover:bg-accent rounded-md px-1 py-1">
+            {isAsc && <ChevronUp className="h-4 w-4" />}
+            {isDesc && <ChevronDown className="h-4 w-4" />}
+            {!isSorted && <ChevronsUpDown className="h-4 w-4 text-muted-foreground" />}
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-28">
+            <DropdownMenuCheckboxItem
+              className="relative pr-8 pl-2 [&>span:first-child]:right-2 [&>span:first-child]:left-auto [&_svg]:text-muted-foreground"
+              checked={isAsc}
+              onClick={() => handleSort('asc')}
+            >
+              <ChevronUp />
+              Tăng dần
+            </DropdownMenuCheckboxItem>
+            <DropdownMenuCheckboxItem
+              className="relative pr-8 pl-2 [&>span:first-child]:right-2 [&>span:first-child]:left-auto [&_svg]:text-muted-foreground"
+              checked={isDesc}
+              onClick={() => handleSort('desc')}
+            >
+              <ChevronDown />
+              Giảm dần
+            </DropdownMenuCheckboxItem>
+            {isSorted && (
+              <DropdownMenuItem className="pl-2 [&_svg]:text-muted-foreground" onClick={() => handleSort('clear')}>
+                <X />
+                Đặt lại
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    )
+  }
+
   const columns = useMemo<Array<ColumnDef<AffiliateData>>>(
     () => [
       {
         accessorKey: 'affiliate_code',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Mã giới thiệu" />,
+        header: () => <ServerSortableHeader title="Mã giới thiệu" accessorKey="affiliate_code" />,
         cell: ({ row }) => (
           <div>
             <Copy value={getSafeValue(row.getValue('affiliate_code'))} className="font-medium text-blue-600" />
@@ -75,7 +139,7 @@ export function AffiliateList({
       },
       {
         accessorKey: 'affiliate_name',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Tên đại lý" />,
+        header: () => <ServerSortableHeader title="Tên đại lý" accessorKey="affiliate_name" />,
         cell: ({ row }) => <div className="font-medium">{getSafeValue(row.getValue('affiliate_name'))}</div>,
         enableHiding: false,
         size: 200,
@@ -83,13 +147,13 @@ export function AffiliateList({
       },
       {
         accessorKey: 'affiliate_phone',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Số điện thoại" />,
+        header: () => <ServerSortableHeader title="Số điện thoại" accessorKey="affiliate_phone" />,
         cell: ({ row }) => {
           const phone = getSafeValue(row.getValue('affiliate_phone'))
           return phone ? (
             <Copy value={phone} className="text-sm text-blue-600" />
           ) : (
-            <div className="text-sm text-muted-foreground">-</div>
+            <div className="text-sm text-muted-foreground">Không có</div>
           )
         },
         size: 150,
@@ -97,13 +161,13 @@ export function AffiliateList({
       },
       {
         accessorKey: 'affiliate_email',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
+        header: () => <ServerSortableHeader title="Email" accessorKey="affiliate_email" />,
         cell: ({ row }) => {
           const email = getSafeValue(row.getValue('affiliate_email'))
           return email ? (
             <Copy value={email} className="text-sm text-blue-600" />
           ) : (
-            <div className="text-sm text-muted-foreground">-</div>
+            <div className="text-sm text-muted-foreground">Không có</div>
           )
         },
         size: 200,
@@ -111,20 +175,33 @@ export function AffiliateList({
       },
       {
         accessorKey: 'city',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Thành phố" />,
-        cell: ({ row }) => <div className="text-sm">{getSafeValue(row.getValue('city')) || 'N/A'}</div>,
+        header: () => <ServerSortableHeader title="Thành phố" accessorKey="city" />,
+        cell: ({ row }) => <div className="text-sm">{getSafeValue(row.getValue('city')) || 'Không có'}</div>,
         size: 120,
         meta: { label: 'Thành phố' },
       },
       {
-        accessorKey: 'bookings',
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Tổng đơn" />,
+        accessorKey: 'created_at',
+        header: () => <ServerSortableHeader title="Ngày tạo" accessorKey="created_at" />,
+        cell: ({ row }) => {
+          const createdAt = getSafeValue(row.getValue('created_at'))
+          return (
+            <div className="text-sm">{createdAt ? new Date(createdAt).toLocaleDateString('vi-VN') : 'Không có'}</div>
+          )
+        },
+        size: 120,
+        meta: { label: 'Ngày tạo' },
+      },
+      {
+        accessorKey: 'bookings_count',
+        header: () => <div className="font-medium">Tổng đơn</div>,
         cell: ({ row }) => <div className="text-sm">{row.original.bookings?.length || 0} đơn</div>,
         size: 100,
         meta: { label: 'Tổng đơn' },
+        enableSorting: false,
       },
     ],
-    [],
+    [sortBy, sortOrder, onSortChange],
   )
 
   // Get pinned columns
@@ -146,7 +223,8 @@ export function AffiliateList({
     },
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+    // Disable client-side sorting since we're using server-side sorting
+    manualSorting: true,
     pageCount: Math.ceil(totalCount / pageSize),
   })
 

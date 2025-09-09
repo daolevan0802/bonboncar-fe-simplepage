@@ -8,6 +8,8 @@ const affiliateSearchSchema = z.object({
   page: z.number().default(1),
   pageSize: z.number().default(10),
   keyword: z.string().optional(),
+  sortBy: z.string().optional(),
+  sortOrder: z.enum(['ASC', 'DESC']).optional(),
 })
 
 export const Route = createFileRoute('/dashboard/affiliates/')({
@@ -16,7 +18,7 @@ export const Route = createFileRoute('/dashboard/affiliates/')({
 })
 
 function RouteComponent() {
-  const { page, pageSize, keyword } = Route.useSearch()
+  const { page, pageSize, keyword, sortBy, sortOrder } = Route.useSearch()
   const navigate = useNavigate()
 
   // Use real API data
@@ -29,6 +31,8 @@ function RouteComponent() {
     page,
     pageSize,
     keyword: keyword || undefined,
+    sortBy: sortBy || undefined,
+    sortOrder: sortOrder || undefined,
   })
 
   const searchValue = keyword || ''
@@ -40,6 +44,21 @@ function RouteComponent() {
         page: 1, // Reset to first page when searching
         pageSize,
         keyword: value || undefined,
+        sortBy,
+        sortOrder,
+      },
+    })
+  }
+
+  const handleSort = (newSortBy?: string, newSortOrder?: 'ASC' | 'DESC') => {
+    navigate({
+      to: '/dashboard/affiliates',
+      search: {
+        page: 1, // Reset to first page when sorting
+        pageSize,
+        keyword,
+        sortBy: newSortBy,
+        sortOrder: newSortOrder,
       },
     })
   }
@@ -69,6 +88,9 @@ function RouteComponent() {
           totalCount={affiliateData?.meta?.total || 0}
           searchValue={searchValue}
           onSearchChange={handleSearch}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSortChange={handleSort}
         />
       )}
     </div>

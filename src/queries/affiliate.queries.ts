@@ -28,14 +28,15 @@ export const affiliateBookingsQueryKeys = {
   detail: (id: number) => [...affiliateQueryKeys.details(), id] as const,
 }
 
-// Query to fetch affiliates with pagination and keyword filtering
+// Query to fetch affiliates with pagination, keyword filtering, and sorting
 export function useAffiliatesQueries(
   filter: AffiliateFilter,
   options?: Omit<UseQueryOptions<GetAffiliateResponse, unknown>, 'queryKey' | 'queryFn'>,
 ) {
   return useQuery({
     queryKey: affiliateQueryKeys.list(filter),
-    queryFn: () => affiliateAPI.getAffiliates(filter.page, filter.pageSize, filter.keyword || ''),
+    queryFn: () =>
+      affiliateAPI.getAffiliates(filter.page, filter.pageSize, filter.keyword || '', filter.sortBy, filter.sortOrder),
     retry: 3,
     retryDelay: 1000,
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -50,7 +51,13 @@ export function useAffiliateBookingsQueries(
   return useQuery({
     queryKey: affiliateBookingsQueryKeys.list(filter),
     queryFn: () =>
-      affiliateAPI.getAffiliateBookings(filter.page, filter.pageSize, filter.keyword || '', filter.isAffiliate ?? true),
+      affiliateAPI.getAffiliateBookings(
+        filter.page,
+        filter.pageSize,
+        filter.keyword || '',
+        filter.sortBy,
+        filter.sortOrder,
+      ),
     retry: 3,
     retryDelay: 1000,
     staleTime: 5 * 60 * 1000, // 5 minutes
