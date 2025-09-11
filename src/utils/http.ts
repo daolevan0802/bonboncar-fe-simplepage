@@ -9,7 +9,12 @@ import { getToken, removeToken, setToken } from '@/utils/cookies'
 export const app_config = {
   base_url:
     import.meta.env.VITE_BOOKING_API || 'https://bonbon-booking-api-staging-108013449433.asia-southeast1.run.app',
+  // API Key for admin
   api_key: import.meta.env.VITE_BOOKING_API_KEY || 'c189bd6938b08c1c355bca3641539417c06b6f4e22705f7d8301ac68eb762de2',
+  // API Key for b2b user
+  // api_key:
+  //   import.meta.env.VITE_BOOKING_API_KEY ||
+  //   'bbk_STAGING_zGe3DTaf_cba7ae28db288467770b8c38abe99df780d4600a453d9c034a16438689882e64',
   cronjob_api_url:
     import.meta.env.VITE_CRONJOB_API_URL || 'https://bonbon-cronjob-108013449433.asia-southeast1.run.app',
   cronjob_api_key:

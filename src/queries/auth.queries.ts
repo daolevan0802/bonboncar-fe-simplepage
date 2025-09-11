@@ -26,7 +26,7 @@ export const useLoginMutation = () => {
       queryClient.clear()
 
       // Redirect based on role
-      if (response.role === 'affiliate') {
+      if (response.role === 'b2b_user') {
         navigate({ to: routes.dashboardBookingsAffiliate })
       } else if (
         response.role === 'admin' ||

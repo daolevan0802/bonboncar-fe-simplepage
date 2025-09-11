@@ -35,12 +35,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         title: 'Quản lý đặt đơn của đại lý',
         url: '/dashboard/bookings-affiliate',
       },
+      {
+        title: 'Quản lý phụ thu',
+        url: '/dashboard/surcharges',
+      },
     ]
 
     // Filter navigation items based on role
     let filteredItems: typeof allNavItems = []
 
-    if (userRole === 'affiliate') {
+    if (userRole === 'b2b_user') {
       // Affiliate chỉ thấy "Quản lý đặt đơn của đại lý"
       filteredItems = allNavItems.filter((item) => item.url === '/dashboard/bookings-affiliate')
     } else if (userRole === 'admin' || userRole === 'superadmin' || userRole === 'strapi-super-admin') {

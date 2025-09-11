@@ -12,10 +12,13 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NotFoundIndexRouteImport } from './routes/not-found/index'
+import { Route as DashboardSurchargesIndexRouteImport } from './routes/dashboard/surcharges/index'
 import { Route as DashboardStatisticsIndexRouteImport } from './routes/dashboard/statistics/index'
 import { Route as DashboardBookingsIndexRouteImport } from './routes/dashboard/bookings/index'
 import { Route as DashboardBookingsAffiliateIndexRouteImport } from './routes/dashboard/bookings-affiliate/index'
 import { Route as DashboardAffiliatesIndexRouteImport } from './routes/dashboard/affiliates/index'
+import { Route as DashboardSurchargesViewIdRouteImport } from './routes/dashboard/surcharges/view/$id'
+import { Route as DashboardSurchargesEditIdRouteImport } from './routes/dashboard/surcharges/edit/$id'
 
 const DashboardRouteRoute = DashboardRouteRouteImport.update({
   id: '/dashboard',
@@ -32,6 +35,12 @@ const NotFoundIndexRoute = NotFoundIndexRouteImport.update({
   path: '/not-found/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardSurchargesIndexRoute =
+  DashboardSurchargesIndexRouteImport.update({
+    id: '/surcharges/',
+    path: '/surcharges/',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 const DashboardStatisticsIndexRoute =
   DashboardStatisticsIndexRouteImport.update({
     id: '/statistics/',
@@ -55,6 +64,18 @@ const DashboardAffiliatesIndexRoute =
     path: '/affiliates/',
     getParentRoute: () => DashboardRouteRoute,
   } as any)
+const DashboardSurchargesViewIdRoute =
+  DashboardSurchargesViewIdRouteImport.update({
+    id: '/surcharges/view/$id',
+    path: '/surcharges/view/$id',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
+const DashboardSurchargesEditIdRoute =
+  DashboardSurchargesEditIdRouteImport.update({
+    id: '/surcharges/edit/$id',
+    path: '/surcharges/edit/$id',
+    getParentRoute: () => DashboardRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -64,6 +85,9 @@ export interface FileRoutesByFullPath {
   '/dashboard/bookings-affiliate': typeof DashboardBookingsAffiliateIndexRoute
   '/dashboard/bookings': typeof DashboardBookingsIndexRoute
   '/dashboard/statistics': typeof DashboardStatisticsIndexRoute
+  '/dashboard/surcharges': typeof DashboardSurchargesIndexRoute
+  '/dashboard/surcharges/edit/$id': typeof DashboardSurchargesEditIdRoute
+  '/dashboard/surcharges/view/$id': typeof DashboardSurchargesViewIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -73,6 +97,9 @@ export interface FileRoutesByTo {
   '/dashboard/bookings-affiliate': typeof DashboardBookingsAffiliateIndexRoute
   '/dashboard/bookings': typeof DashboardBookingsIndexRoute
   '/dashboard/statistics': typeof DashboardStatisticsIndexRoute
+  '/dashboard/surcharges': typeof DashboardSurchargesIndexRoute
+  '/dashboard/surcharges/edit/$id': typeof DashboardSurchargesEditIdRoute
+  '/dashboard/surcharges/view/$id': typeof DashboardSurchargesViewIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -83,6 +110,9 @@ export interface FileRoutesById {
   '/dashboard/bookings-affiliate/': typeof DashboardBookingsAffiliateIndexRoute
   '/dashboard/bookings/': typeof DashboardBookingsIndexRoute
   '/dashboard/statistics/': typeof DashboardStatisticsIndexRoute
+  '/dashboard/surcharges/': typeof DashboardSurchargesIndexRoute
+  '/dashboard/surcharges/edit/$id': typeof DashboardSurchargesEditIdRoute
+  '/dashboard/surcharges/view/$id': typeof DashboardSurchargesViewIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -94,6 +124,9 @@ export interface FileRouteTypes {
     | '/dashboard/bookings-affiliate'
     | '/dashboard/bookings'
     | '/dashboard/statistics'
+    | '/dashboard/surcharges'
+    | '/dashboard/surcharges/edit/$id'
+    | '/dashboard/surcharges/view/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -103,6 +136,9 @@ export interface FileRouteTypes {
     | '/dashboard/bookings-affiliate'
     | '/dashboard/bookings'
     | '/dashboard/statistics'
+    | '/dashboard/surcharges'
+    | '/dashboard/surcharges/edit/$id'
+    | '/dashboard/surcharges/view/$id'
   id:
     | '__root__'
     | '/'
@@ -112,6 +148,9 @@ export interface FileRouteTypes {
     | '/dashboard/bookings-affiliate/'
     | '/dashboard/bookings/'
     | '/dashboard/statistics/'
+    | '/dashboard/surcharges/'
+    | '/dashboard/surcharges/edit/$id'
+    | '/dashboard/surcharges/view/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -143,6 +182,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NotFoundIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/surcharges/': {
+      id: '/dashboard/surcharges/'
+      path: '/surcharges'
+      fullPath: '/dashboard/surcharges'
+      preLoaderRoute: typeof DashboardSurchargesIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
     '/dashboard/statistics/': {
       id: '/dashboard/statistics/'
       path: '/statistics'
@@ -171,6 +217,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAffiliatesIndexRouteImport
       parentRoute: typeof DashboardRouteRoute
     }
+    '/dashboard/surcharges/view/$id': {
+      id: '/dashboard/surcharges/view/$id'
+      path: '/surcharges/view/$id'
+      fullPath: '/dashboard/surcharges/view/$id'
+      preLoaderRoute: typeof DashboardSurchargesViewIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/surcharges/edit/$id': {
+      id: '/dashboard/surcharges/edit/$id'
+      path: '/surcharges/edit/$id'
+      fullPath: '/dashboard/surcharges/edit/$id'
+      preLoaderRoute: typeof DashboardSurchargesEditIdRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
   }
 }
 
@@ -179,6 +239,9 @@ interface DashboardRouteRouteChildren {
   DashboardBookingsAffiliateIndexRoute: typeof DashboardBookingsAffiliateIndexRoute
   DashboardBookingsIndexRoute: typeof DashboardBookingsIndexRoute
   DashboardStatisticsIndexRoute: typeof DashboardStatisticsIndexRoute
+  DashboardSurchargesIndexRoute: typeof DashboardSurchargesIndexRoute
+  DashboardSurchargesEditIdRoute: typeof DashboardSurchargesEditIdRoute
+  DashboardSurchargesViewIdRoute: typeof DashboardSurchargesViewIdRoute
 }
 
 const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
@@ -186,6 +249,9 @@ const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardBookingsAffiliateIndexRoute: DashboardBookingsAffiliateIndexRoute,
   DashboardBookingsIndexRoute: DashboardBookingsIndexRoute,
   DashboardStatisticsIndexRoute: DashboardStatisticsIndexRoute,
+  DashboardSurchargesIndexRoute: DashboardSurchargesIndexRoute,
+  DashboardSurchargesEditIdRoute: DashboardSurchargesEditIdRoute,
+  DashboardSurchargesViewIdRoute: DashboardSurchargesViewIdRoute,
 }
 
 const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(

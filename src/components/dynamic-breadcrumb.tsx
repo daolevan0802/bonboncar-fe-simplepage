@@ -56,6 +56,10 @@ const ROUTE_CONFIG = {
     title: 'Quản lý đại lý',
     showInBreadcrumb: true,
   },
+  '/dashboard/surcharges': {
+    title: 'Quản lý phụ thu',
+    showInBreadcrumb: true,
+  },
 } as const
 
 interface BreadcrumbItem {
@@ -107,6 +111,36 @@ export function DynamicBreadcrumb() {
     ) {
       items.push({
         title: 'Chi tiết đơn',
+        isCurrentPage: true,
+      })
+    }
+
+    // Thêm breadcrumb cho trang xem chi tiết phụ thu
+    if (
+      pathSegments.length === 4 &&
+      pathSegments[0] === 'dashboard' &&
+      pathSegments[1] === 'surcharges' &&
+      pathSegments[2] === 'view' &&
+      pathSegments[3] &&
+      !isNaN(Number(pathSegments[3]))
+    ) {
+      items.push({
+        title: 'Xem chi tiết phụ thu',
+        isCurrentPage: true,
+      })
+    }
+
+    // Thêm breadcrumb cho trang chỉnh sửa phụ thu
+    if (
+      pathSegments.length === 4 &&
+      pathSegments[0] === 'dashboard' &&
+      pathSegments[1] === 'surcharges' &&
+      pathSegments[2] === 'edit' &&
+      pathSegments[3] &&
+      !isNaN(Number(pathSegments[3]))
+    ) {
+      items.push({
+        title: 'Chỉnh sửa phụ thu',
         isCurrentPage: true,
       })
     }

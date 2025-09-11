@@ -28,7 +28,7 @@ export const guestGuard = () => {
     const userRole = getUserRole()
 
     // Redirect based on role
-    if (userRole === 'affiliate') {
+    if (userRole === 'b2b_user') {
       throw redirect({
         to: routes.dashboardBookingsAffiliate,
         replace: true,
